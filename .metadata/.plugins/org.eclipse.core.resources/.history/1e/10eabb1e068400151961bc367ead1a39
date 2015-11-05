@@ -678,10 +678,6 @@ public class Conjunction {
 			result.conflictInducedClause = conflictInducedClause();
 			return result;
 		}
-		else if(Thread.interrupted()) {
-			SearchResult result = new SearchResult(SearchStatus.Timeout);
-			return result;
-		}
 		
 		Assignment a = control.pick(this);
 		stats.expand(depth);
