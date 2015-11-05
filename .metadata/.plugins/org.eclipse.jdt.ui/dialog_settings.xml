@@ -19,8 +19,8 @@
 	<section name="quick_assist_proposal_size">
 	</section>
 	<section name="SourceActionDialog.methods">
-		<item value="true" key="Comments"/>
 		<item value="1" key="VisibilityModifier"/>
+		<item value="true" key="Comments"/>
 		<item value="false" key="SynchronizedModifier"/>
 		<item value="false" key="FinalModifier"/>
 	</section>
@@ -46,33 +46,33 @@
 		<section name="projects">
 			<section name="test">
 				<item value="C:\Users\Jasmine\workspace\test\doc" key="destdir"/>
+				<item value="" key="href"/>
 				<item value="C:\Users\Jasmine\workspace\test\javadoc.xml" key="antpath"/>
-				<item value="" key="href"/>
-			</section>
-			<section name="Playlist">
-				<item value="C:\Users\Jasmine\workspace\Playlist\doc" key="destdir"/>
-				<item value="C:\Users\Jasmine\workspace\Playlist\javadoc.xml" key="antpath"/>
-				<item value="" key="href"/>
 			</section>
 			<section name="Song List">
 				<item value="C:\Users\Jasmine\Desktop\Song List\doc" key="destdir"/>
-				<item value="C:\Users\Jasmine\Desktop\Song List\javadoc.xml" key="antpath"/>
 				<item value="" key="href"/>
+				<item value="C:\Users\Jasmine\Desktop\Song List\javadoc.xml" key="antpath"/>
+			</section>
+			<section name="Playlist">
+				<item value="C:\Users\Jasmine\workspace\Playlist\doc" key="destdir"/>
+				<item value="" key="href"/>
+				<item value="C:\Users\Jasmine\workspace\Playlist\javadoc.xml" key="antpath"/>
 			</section>
 			<section name="Recitation">
 				<item value="C:\Users\Jasmine\Dropbox\College\Software meth\software-methodology\Recitation\doc" key="destdir"/>
-				<item value="C:\Users\Jasmine\Dropbox\College\Software meth\software-methodology\Recitation\javadoc.xml" key="antpath"/>
 				<item value="" key="href"/>
+				<item value="C:\Users\Jasmine\Dropbox\College\Software meth\software-methodology\Recitation\javadoc.xml" key="antpath"/>
 			</section>
 			<section name="PhotoAlbum22">
 				<item value="C:\Users\Jasmine\Desktop\fuckthis\photoalbum22\doc" key="destdir"/>
-				<item value="C:\Users\Jasmine\Desktop\fuckthis\photoalbum22\javadoc.xml" key="antpath"/>
 				<item value="" key="href"/>
+				<item value="C:\Users\Jasmine\Desktop\fuckthis\photoalbum22\javadoc.xml" key="antpath"/>
 			</section>
 			<section name="chess22">
 				<item value="C:\Users\Jasmine\workspace\chess22\doc" key="destdir"/>
-				<item value="C:\Users\Jasmine\workspace\chess22\javadoc.xml" key="antpath"/>
 				<item value="" key="href"/>
+				<item value="C:\Users\Jasmine\workspace\chess22\javadoc.xml" key="antpath"/>
 			</section>
 		</section>
 	</section>
@@ -85,8 +85,8 @@
 		<section name="DialogBoundsSettings">
 			<item value="600" key="DIALOG_WIDTH"/>
 			<item value="-83" key="DIALOG_Y_ORIGIN"/>
-			<item value="13" key="DIALOG_X_ORIGIN"/>
 			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="13" key="DIALOG_X_ORIGIN"/>
 			<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		</section>
 	</section>
@@ -104,8 +104,8 @@
 	<section name="DialogBounds_GetterSetterTreeSelectionDialog">
 		<item value="529" key="DIALOG_WIDTH"/>
 		<item value="8" key="DIALOG_Y_ORIGIN"/>
-		<item value="696" key="DIALOG_HEIGHT"/>
 		<item value="427" key="DIALOG_X_ORIGIN"/>
+		<item value="696" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="NewClassWizardPage">
@@ -119,8 +119,8 @@
 	<section name="JavadocWizardDialog">
 		<item value="616" key="DIALOG_WIDTH"/>
 		<item value="8" key="DIALOG_Y_ORIGIN"/>
-		<item value="567" key="DIALOG_HEIGHT"/>
 		<item value="383" key="DIALOG_X_ORIGIN"/>
+		<item value="567" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 </section>

@@ -278,7 +278,7 @@ public class Conjunction {
 	 * (for example via unit propagation), so link the assignment
 	 * to the variables that triggered the inference.  Otherwise,
 	 * assume that this assignment is a standalone decision.
-	 *
+	 
 	 * @param v the variable to assign
 	 * @param b the truth value to give it
 	 * @param dependencies the dependencies
@@ -606,6 +606,32 @@ public class Conjunction {
 		public boolean backjump() { return false; }
 	};
 	
+	/** a dfs search */
+	public static SearchControl dfs_search = new SearchControl() {
+
+		@Override
+		public void simplify(Conjunction c) {
+			// TODO Auto-generated method stub
+			c.propagateUnitClauses();
+			c.assumePureLiterals();
+		}
+
+		@Override
+		public Assignment pick(Conjunction c) {
+			// TODO Auto-generated method stub
+			
+			return c.mostFrequentVariable();
+		}
+
+		@Override
+		public boolean backjump() {
+			// TODO Auto-generated method stub
+			
+			return false;
+		}
+		
+	};
+	
 	/**
 	 *  The most sophisticated search: with unit propagation, 
 	 *  pure variable elimination, backjumping,
@@ -615,7 +641,7 @@ public class Conjunction {
 	    /* TBC: Your code here, replacing the line below */
 			//TODO
 			
-	    vanillaSearch;
+	    dfs_search;
 	
 	/**
 	 * Generic template for satisfiability search,
@@ -627,10 +653,62 @@ public class Conjunction {
 	 * @param depth number of decisions made (for statistics)
 	 * @return search result structure describing what happened
 	 */
-	SearchResult search(SearchControl control, SearchStats stats, int depth) {
+	SearchResult search_original(SearchControl control, SearchStats stats, int depth) {
 	    /* TBC: Your code here, replacing the line below */
 		//TODO
 	    return new SearchResult((Disjunction) null);
+	}
+	
+	/**
+	 * search
+	 */
+	SearchResult search(SearchControl control, SearchStats stats, int depth) {
+		
+		control.simplify(this);
+		
+		if(this.isConsistent()) {
+			stats.succeed(depth);
+			SearchResult sr = new SearchResult(SearchStatus.Success);
+			sr.assignment = this.assignments;
+			return sr;
+		}
+		else if(this.isInconsistent()){
+			stats.fail();
+			SearchResult result = new SearchResult(SearchStatus.Failure);
+			result.conflictInducedClause = conflictInducedClause();
+			return result;
+		}
+		
+		Assignment a = control.pick(this);
+		stats.expand(depth);
+		
+		Conjunction conjunction = new Conjunction(this, a.v, a.b);
+		SearchResult sr = conjunction.search(control, stats, depth + 1);
+		
+		if(sr.getStatus() == SearchStatus.Success) {
+			SearchResult result = new SearchResult(SearchStatus.Success);
+			result.assignment = this.assignments;
+			return result;
+		}
+		else if(sr.getStatus() == SearchStatus.Failure) {
+			Conjunction conjunction2 = new Conjunction(this, a.v, !a.b);
+			SearchResult sr2 = conjunction2.search(control, stats, depth+1);
+			
+			if(sr2.getStatus() == SearchStatus.Success) {
+				return sr2;
+			}
+			else if(sr2.getStatus() == SearchStatus.Failure) {
+				return sr2;
+			}
+		}
+
+		
+
+		return new SearchResult(SearchStatus.Timeout);
+		
+		
+		//TODO
+		
 	}
 
 	/**
@@ -706,6 +784,7 @@ public class Conjunction {
 	 */
 	public static String doSearchWithTimeLimit(String testFile, SearchControl method, long maxMillisecs) 
 	throws IOException {
+		System.out.println(testFile);
 	    File initialFile = new File(testFile);
 	    InputStream targetStream = new FileInputStream(initialFile);
 	    BufferedReader br = new BufferedReader( new InputStreamReader( targetStream ) );
@@ -764,7 +843,32 @@ public class Conjunction {
 	    /* TBC: Explore some interesting examples, using patterns such as the following */
 		//TODO
 		
-	    String o = doSearchWithTimeLimit("simple_v3_c2.cnf", vanillaSearch, 1000L);
+		//satisfiable
+				//String s = doSearchWithTimeLimit("bf0432-007.cnf", vanillaSearch, 1000L);
+				//System.err.println(s);
+		
+		//satisfiable
+	    String o = doSearchWithTimeLimit("simple_v3_c2.cnf", superFancySearch, 1000L);
+	    System.err.println(o);
+	    
+	    //satisfiable
+	    o = doSearchWithTimeLimit("quinn.cnf", superFancySearch, 1000L);
+		System.err.println(o);
+		
+		//not satisfiable
+		o = doSearchWithTimeLimit("hole6.cnf", superFancySearch, 1000L);
+		System.err.println(o);
+		
+		//satisfiable
+		o = doSearchWithTimeLimit("par8-1-c.cnf", superFancySearch, 1000L);
+		System.err.println(o);
+		
+		//satisfiable
+		o = doSearchWithTimeLimit("zebra_v155_c1135.cnf", superFancySearch, 1000L);
+		System.err.println(o);
+		
+		//satifiable
+		o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 1000L);
 		System.err.println(o);
   	}
 }

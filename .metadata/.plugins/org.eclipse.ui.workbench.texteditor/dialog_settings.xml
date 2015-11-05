@@ -13,16 +13,16 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="" key="selection"/>
+		<item value="conflictIndu" key="selection"/>
 		<list key="findhistory">
-			<item value="tbc"/>
-			<item value="replays"/>
-			<item value="run("/>
-			<item value="run"/>
-			<item value="black check"/>
-			<item value="serial"/>
-			<item value="id/textview1"/>
-			<item value="textview1"/>
+			<item value="conflictindu"/>
+			<item value="search("/>
+			<item value="decisions"/>
+			<item value="searchstatus"/>
+			<item value="searchresult"/>
+			<item value="search"/>
+			<item value="pick"/>
+			<item value="searchstats"/>
 		</list>
 		<list key="replacehistory">
 		</list>
