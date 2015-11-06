@@ -700,11 +700,8 @@ public class Conjunction {
 			}
 			else if(sr2.getStatus() == SearchStatus.Failure) {
 				if(control.backjump()) {
-					if(sr.conflictInducedClause.equals(sr2.conflictInducedClause)){
-						System.out.println("what the heck is happening");
-					}
-					Disjunction something = Disjunction.resolve(sr.conflictInducedClause, sr2.conflictInducedClause);
-					System.out.println("blah");
+					Disjunction something = Disjunction.resolve(d1, d2);
+					Disjunction somethingElse = conflictInducedClause();
 				}
 				return sr2;
 			}

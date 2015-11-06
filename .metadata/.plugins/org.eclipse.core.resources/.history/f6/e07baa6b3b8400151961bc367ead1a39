@@ -626,7 +626,7 @@ public class Conjunction {
 		public boolean backjump() {
 			// TODO Auto-generated method stub
 			
-			return true;
+			return false;
 		}
 		
 	};
@@ -699,13 +699,6 @@ public class Conjunction {
 				return sr2;
 			}
 			else if(sr2.getStatus() == SearchStatus.Failure) {
-				if(control.backjump()) {
-					if(sr.conflictInducedClause.equals(sr2.conflictInducedClause)){
-						System.out.println("what the heck is happening");
-					}
-					Disjunction something = Disjunction.resolve(sr.conflictInducedClause, sr2.conflictInducedClause);
-					System.out.println("blah");
-				}
 				return sr2;
 			}
 		}
@@ -876,7 +869,7 @@ public class Conjunction {
 		System.err.println(o);
 		
 		//not satisfiable
-		o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 100000L);
+		o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 10000L);
 		System.err.println(o);
 		
 		//satisfiable
