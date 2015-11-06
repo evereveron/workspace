@@ -7760,3 +7760,21 @@ Contains: Could not delete: C:\Users\Jasmine\Dropbox\College\Software meth\andro
 !MESSAGE Could not delete: C:\Users\Jasmine\Dropbox\College\Software meth\android22\bin\classes\com\example.
 !SUBENTRY 5 org.eclipse.core.filesystem 4 273 2015-11-05 10:47:01.387
 !MESSAGE Could not delete: C:\Users\Jasmine\Dropbox\College\Software meth\android22\bin\classes\com.
+
+!ENTRY org.eclipse.ui 4 4 2015-11-06 03:15:43.436
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.disable.grammar.constraints
+
+!ENTRY org.eclipse.ui 4 4 2015-11-06 03:15:43.467
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.reload.dependencies
+
+!ENTRY org.eclipse.ui 4 4 2015-11-06 03:15:43.514
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.disable.grammar.constraints
+
+!ENTRY org.eclipse.ui 4 4 2015-11-06 03:15:43.514
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.reload.dependencies
+
+!ENTRY org.eclipse.ui 4 4 2015-11-06 03:15:43.530
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.disable.grammar.constraints
+
+!ENTRY org.eclipse.ui 4 4 2015-11-06 03:15:43.545
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.reload.dependencies

@@ -652,15 +652,6 @@ public class Conjunction {
 	 * @param depth number of decisions made (for statistics)
 	 * @return search result structure describing what happened
 	 */
-	SearchResult search_original(SearchControl control, SearchStats stats, int depth) {
-	    /* TBC: Your code here, replacing the line below */
-		//TODO
-	    return new SearchResult((Disjunction) null);
-	}
-	
-	/**
-	 * search
-	 */
 	SearchResult search(SearchControl control, SearchStats stats, int depth) {
 		
 		control.simplify(this);
@@ -691,7 +682,30 @@ public class Conjunction {
 
 			return sr;
 		}
+		else if(control.backjump()){
+			if(sr.getConflictInducedClause() != null && sr.getConflictInducedClause().truthValue(assignments) != null) {
+				return new SearchResult(sr.getConflictInducedClause());
+			}
+			else if(sr.getStatus() == SearchStatus.Failure) {
+				Conjunction conjunction2 = new Conjunction(this, a.v, !a.b);
+				SearchResult sr2 = conjunction2.search(control, stats, depth+1);
+				
+				if(sr2.getStatus() == SearchStatus.Success) {
+					return sr2;
+				}
+				else if(sr2.getStatus() == SearchStatus.Failure) {
+					if(control.backjump()) {
+						Disjunction something = Disjunction.resolve(sr.conflictInducedClause, sr2.conflictInducedClause);
+						SearchResult conflict = new SearchResult(something);
+						return conflict;
+						
+					}
+					return sr2;
+				}
+			}
+		}
 		else if(sr.getStatus() == SearchStatus.Failure) {
+			
 			Conjunction conjunction2 = new Conjunction(this, a.v, !a.b);
 			SearchResult sr2 = conjunction2.search(control, stats, depth+1);
 			
@@ -700,18 +714,17 @@ public class Conjunction {
 			}
 			else if(sr2.getStatus() == SearchStatus.Failure) {
 				if(control.backjump()) {
-					if(sr.conflictInducedClause.equals(sr2.conflictInducedClause)){
-						System.out.println("what the heck is happening");
-					}
 					Disjunction something = Disjunction.resolve(sr.conflictInducedClause, sr2.conflictInducedClause);
-					System.out.println("blah");
+					SearchResult conflict = new SearchResult(something);
+					return conflict;
+					
 				}
 				return sr2;
 			}
 		}
 
 		
-
+		//return sr;
 		return new SearchResult(SearchStatus.Timeout);
 		
 		
@@ -880,7 +893,11 @@ public class Conjunction {
 		System.err.println(o);
 		
 		//satisfiable
-		o = doSearchWithTimeLimit("aim-50-1_6-yes1-4.cnf", superFancySearch, 1000L);
+		o = doSearchWithTimeLimit("aim-50-1_6-yes1-4.cnf", superFancySearch, 10000L);
+		System.err.println(o);
+		
+		//satisfiable
+		o = doSearchWithTimeLimit("dubois20.cnf", superFancySearch, 1000000L);
 		System.err.println(o);
   	}
 }
