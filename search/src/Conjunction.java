@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.Map;
 
@@ -606,7 +607,7 @@ public class Conjunction {
 		public boolean backjump() { return false; }
 	};
 	
-	/** a dfs search */
+	/** a dfs search that is fancy*/
 	public static SearchControl dfs_search = new SearchControl() {
 
 		@Override
@@ -624,8 +625,69 @@ public class Conjunction {
 
 		@Override
 		public boolean backjump() {
-			// TODO Auto-generated method stub
+
+			return true;
+		}
+		
+	};
+	
+	public static SearchControl noBackJump = new SearchControl() {
+
+		@Override
+		public void simplify(Conjunction c) {
+			c.propagateUnitClauses();
+			c.assumePureLiterals();
 			
+		}
+
+		@Override
+		public Assignment pick(Conjunction c) {
+			return c.mostFrequentVariable();
+		}
+
+		@Override
+		public boolean backjump() {
+			return false;
+		}
+		
+	};
+	
+	public static SearchControl freqLit = new SearchControl() {
+
+		@Override
+		public void simplify(Conjunction c) {
+			c.propagateUnitClauses();
+			c.assumePureLiterals();
+			
+		}
+
+		@Override
+		public Assignment pick(Conjunction c) {
+			return c.mostFrequentLiteral();
+		}
+
+		@Override
+		public boolean backjump() {
+			return true;
+		}
+		
+	};
+	
+	public static SearchControl balLit = new SearchControl() {
+
+		@Override
+		public void simplify(Conjunction c) {
+			c.propagateUnitClauses();
+			c.assumePureLiterals();
+		}
+
+		@Override
+		public Assignment pick(Conjunction c) {
+			return c.mostBalancedLiteral();
+		}
+
+		@Override
+		public boolean backjump() {
 			return true;
 		}
 		
@@ -636,11 +698,15 @@ public class Conjunction {
 	 *  pure variable elimination, backjumping,
 	 *  and a smart strategy for picking decision variables. 
 	 */
-	public static SearchControl superFancySearch = 
-	    /* TBC: Your code here, replacing the line below */
-			//TODO
-			
-	    dfs_search;
+	public static SearchControl superFancySearch = dfs_search;
+	
+	public static SearchControl kindaFancySearch = noBackJump;
+	
+	public static SearchControl freqLitSearch = freqLit;
+	
+	public static SearchControl balLitSearch = balLit;
+	
+	public static SearchControl boringSearch = vanillaSearch;
 	
 	/**
 	 * Generic template for satisfiability search,
@@ -867,37 +933,140 @@ public class Conjunction {
 		//satisfiable
 				//String s = doSearchWithTimeLimit("bf0432-007.cnf", vanillaSearch, 1000L);
 				//System.err.println(s);
+		if(args.length == 1) {
+			String a = "";
+			Scanner sc = new Scanner(System.in);
+			switch (args[0]) {
+				case "superFancySearch":
+					System.out.println(args[0]);
+					for(int i=0; i<20;i++) {
+						a = doSearchWithTimeLimit("test"+i+".cnf", superFancySearch, 100000L);
+						System.err.println(a);
+						System.err.println("enter anything");
+						sc.nextLine();
+					}
+					break;
+				case "noBackJump":
+					System.out.println(args[0]);
+					for(int i=0; i<20;i++) {
+						a = doSearchWithTimeLimit("test"+i+".cnf", kindaFancySearch, 100000L);
+						System.err.println(a);
+						System.err.println("enter anything");
+						sc.nextLine();
+					}
+					break;
+				case "balLit":
+					System.out.println(args[0]);
+					for(int i=0; i<20;i++) {
+						a = doSearchWithTimeLimit("test"+i+".cnf", balLitSearch, 100000L);
+						System.err.println(a);
+						System.err.println("enter anything");
+						sc.nextLine();
+					}
+					break;
+				case "freqLit":
+					System.out.println(args[0]);
+					for(int i=0; i<20;i++) {
+						a = doSearchWithTimeLimit("test"+i+".cnf", freqLitSearch, 100000L);
+						System.err.println(a);
+						System.err.println("enter anything");
+						sc.nextLine();
+					}
+					break;
+				case "vanilla":
+					System.out.println(args[0]);
+					for(int i=0; i<20;i++) {
+						a = doSearchWithTimeLimit("test"+i+".cnf", vanillaSearch, 100000L);
+						System.err.println(a);
+						System.err.println("enter anything");
+						sc.nextLine();
+					}
+					break;
+				case "all":
+					System.out.println(args[0]);
+					for(int i=0; i<20;i++) {
+						/*a = doSearchWithTimeLimit("test"+i+".cnf", vanillaSearch, 100000L);
+						System.err.println(a);
+						System.err.println("press enter");
+						sc.nextLine();
+						*/
+						System.out.println("freqLit");
+						a = doSearchWithTimeLimit("test"+i+".cnf", freqLitSearch, 100000L);
+						System.err.println(a);
+						System.err.println("press enter");
+						sc.nextLine();
+						
+						System.out.println("balLit");
+						a = doSearchWithTimeLimit("test"+i+".cnf", balLitSearch, 100000L);
+						System.err.println(a);
+						System.err.println("press enter");
+						sc.nextLine();
+						
+						System.out.println("nobackjump");
+						a = doSearchWithTimeLimit("test"+i+".cnf", kindaFancySearch, 100000L);
+						System.err.println(a);
+						System.err.println("press enter");
+						sc.nextLine();
+						
+						System.out.println("superfancy");
+						a = doSearchWithTimeLimit("test"+i+".cnf", superFancySearch, 100000L);
+						System.err.println(a);
+						System.err.println("press enter");
+						sc.nextLine();
+					}
+					
+				default:
+					System.out.println(args[0]);
+					System.out.println("argument must be valid searchcontrol or all");
+			}
+			
+		}
+		else {
+			String o = "";
+/*
+			//satisfiable
+		   o = doSearchWithTimeLimit("simple_v3_c2.cnf", superFancySearch, 100000L);
+		    System.err.println(o);
+		    
+		    //satisfiable
+		    o = doSearchWithTimeLimit("quinn.cnf", superFancySearch, 100000L);
+			System.err.println(o);
+			*/
+			//not satisfiable
+			o = doSearchWithTimeLimit("hole6.cnf", superFancySearch, 100000L);
+			System.err.println(o);
+			
+			//o = doSearchWithTimeLimit("hole6.cnf", kindaFancySearch, 100000L);
+			//System.err.println(o);
+			/*
+			//satisfiable
+			o = doSearchWithTimeLimit("par8-1-c.cnf", superFancySearch, 100000L);
+			System.err.println(o);
+			
+			//satisfiable
+			o = doSearchWithTimeLimit("zebra_v155_c1135.cnf", superFancySearch, 100000L);
+			System.err.println(o);
+			
+			//not satisfiable
+			o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 100000L);
+			System.err.println(o);
+			
+			//satisfiable
+			o = doSearchWithTimeLimit("aim-50-1_6-yes1-4.cnf", superFancySearch, 10000L);
+			System.err.println(o);
+			
+			//satisfiable
+			o = doSearchWithTimeLimit("dubois20.cnf", superFancySearch, 1000000L);
+			System.err.println(o);
+			
+			
+			String a = "";
+			for(int i=0; i<20;i++) {
+				a = doSearchWithTimeLimit("test"+i+".cnf", superFancySearch, 100000L);
+				System.err.println(a);
+			}
+			*/
+		}
 		
-		//satisfiable
-	    String o = doSearchWithTimeLimit("simple_v3_c2.cnf", superFancySearch, 100000L);
-	    System.err.println(o);
-	    
-	    //satisfiable
-	    o = doSearchWithTimeLimit("quinn.cnf", superFancySearch, 100000L);
-		System.err.println(o);
-		
-		//not satisfiable
-		o = doSearchWithTimeLimit("hole6.cnf", superFancySearch, 100000L);
-		System.err.println(o);
-		
-		//satisfiable
-		o = doSearchWithTimeLimit("par8-1-c.cnf", superFancySearch, 100000L);
-		System.err.println(o);
-		
-		//satisfiable
-		o = doSearchWithTimeLimit("zebra_v155_c1135.cnf", superFancySearch, 100000L);
-		System.err.println(o);
-		
-		//not satisfiable
-		o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 100000L);
-		System.err.println(o);
-		
-		//satisfiable
-		o = doSearchWithTimeLimit("aim-50-1_6-yes1-4.cnf", superFancySearch, 10000L);
-		System.err.println(o);
-		
-		//satisfiable
-		o = doSearchWithTimeLimit("dubois20.cnf", superFancySearch, 1000000L);
-		System.err.println(o);
   	}
 }
