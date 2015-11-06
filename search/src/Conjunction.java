@@ -611,14 +611,13 @@ public class Conjunction {
 
 		@Override
 		public void simplify(Conjunction c) {
-			// TODO Auto-generated method stub
+
 			c.propagateUnitClauses();
 			c.assumePureLiterals();
 		}
 
 		@Override
 		public Assignment pick(Conjunction c) {
-			// TODO Auto-generated method stub
 			
 			return c.mostFrequentVariable();
 		}
@@ -668,14 +667,13 @@ public class Conjunction {
 		
 		if(this.isConsistent()) {
 			stats.succeed(depth);
-			SearchResult sr = new SearchResult(SearchStatus.Success);
-			sr.assignment = this.assignments;
+			SearchResult sr = new SearchResult(this.assignments);
+
 			return sr;
 		}
 		else if(this.isInconsistent()){
-			stats.fail();
-			SearchResult result = new SearchResult(SearchStatus.Failure);
-			result.conflictInducedClause = conflictInducedClause();
+			stats.deadEnd(depth);
+			SearchResult result = new SearchResult(conflictInducedClause());
 			return result;
 		}
 		else if(Thread.interrupted()) {
@@ -690,9 +688,8 @@ public class Conjunction {
 		SearchResult sr = conjunction.search(control, stats, depth + 1);
 		
 		if(sr.getStatus() == SearchStatus.Success) {
-			SearchResult result = new SearchResult(SearchStatus.Success);
-			result.assignment = this.assignments;
-			return result;
+
+			return sr;
 		}
 		else if(sr.getStatus() == SearchStatus.Failure) {
 			Conjunction conjunction2 = new Conjunction(this, a.v, !a.b);
@@ -852,27 +849,31 @@ public class Conjunction {
 				//System.err.println(s);
 		
 		//satisfiable
-	    String o = doSearchWithTimeLimit("simple_v3_c2.cnf", superFancySearch, 1000L);
+	    String o = doSearchWithTimeLimit("simple_v3_c2.cnf", superFancySearch, 100000L);
 	    System.err.println(o);
 	    
 	    //satisfiable
-	    o = doSearchWithTimeLimit("quinn.cnf", superFancySearch, 1000L);
+	    o = doSearchWithTimeLimit("quinn.cnf", superFancySearch, 100000L);
 		System.err.println(o);
 		
 		//not satisfiable
-		o = doSearchWithTimeLimit("hole6.cnf", superFancySearch, 1000L);
+		o = doSearchWithTimeLimit("hole6.cnf", superFancySearch, 100000L);
 		System.err.println(o);
 		
 		//satisfiable
-		o = doSearchWithTimeLimit("par8-1-c.cnf", superFancySearch, 1000L);
+		o = doSearchWithTimeLimit("par8-1-c.cnf", superFancySearch, 100000L);
 		System.err.println(o);
 		
 		//satisfiable
-		o = doSearchWithTimeLimit("zebra_v155_c1135.cnf", superFancySearch, 1000L);
+		o = doSearchWithTimeLimit("zebra_v155_c1135.cnf", superFancySearch, 100000L);
 		System.err.println(o);
 		
-		//satifiable
-		o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 1000L);
+		//not satisfiable
+		o = doSearchWithTimeLimit("aim-100-1_6-no-1.cnf", superFancySearch, 10000L);
+		System.err.println(o);
+		
+		//satisfiable
+		o = doSearchWithTimeLimit("aim-50-1_6-yes1-4.cnf", superFancySearch, 1000L);
 		System.err.println(o);
   	}
 }
