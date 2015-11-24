@@ -81,8 +81,7 @@ public class SampleRun {
         
         // Load training data from the movielens dataset.
         RatingDictionary rd = RatingDictionary.fromMovieLensItems(filePrefix + ".item");
-        //RatingTable data = rd.tabulateMovieLensData(filePrefix + ".data");
-        RatingTable data = rd.tabulateMovieLensData("Sample.data");
+        RatingTable data = rd.tabulateMovieLensData(filePrefix + ".data");
         rd.addTrainingData(data, sampleFold, numCrossFolds);
         
         // Process the data to build models.

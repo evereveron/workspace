@@ -519,8 +519,8 @@ public class RatingDictionary {
         			num++;
         		}
         		else if(rating != null){
-        			System.out.println("rating is not null");
-        			//weightedAvg += st.similarities.get(i).predict(rating.rawScore);
+        			System.out.println("rating is null");
+        			weightedAvg += st.similarities.get(i).predict(rating.rawScore);
         			num ++;
         		}
         		
@@ -531,7 +531,7 @@ public class RatingDictionary {
         	}
         	System.out.println("total sum: " + sum);
         	System.out.println("weighted avg: " + weightedAvg);
-        	if(sum == 0 || weightedAvg ==0) {
+        	if(sum == 0) {
         		//there's no similarity so we should just use a mixed baseline
         		System.out.println("default");
         		return predict(rater, item, Method.MIXED_BASELINE, 
@@ -547,43 +547,22 @@ public class RatingDictionary {
         	
         	double sum = 0;
         	double weightedAvg = 0;
-        	int num =0;
-        	       	
+        	
+        	Rating rating = raterData.get(rater).getRatingFor(key);
+        	
         	for(int i=0; i<numRaterNeighbors; i++) {
         		if(i==st.similarities.size()) {
         			break;
         		}
         		
-        		String key = st.similarities.get(i).key;
-            	//Rating rating = raterData.get(rater).getRatingFor(key);
-        		RatingTable rt = raterData.get(key);
-        		Rating rating = rt.getRatingFor(item);
-            	
-            	if(rating != null && st.similarities.get(i).value > 0) {
-        			System.out.println("raw Score: " + rating.rawScore);
-        			System.out.println("score: " + rating.score);
-        			weightedAvg += st.similarities.get(i).value * st.similarities.get(i).predict(rating.rawScore);
-        			System.out.println("sim value: " + st.similarities.get(i).value);
-        			System.out.println("rating predict: " + st.similarities.get(i).predict(rating.rawScore));
-        			sum += st.similarities.get(i).value;
-        			num++;
-        		}
-        		else if(rating != null){
-        			System.out.println("rating is null");
-        			//weightedAvg += st.similarities.get(i).predict(rating.rawScore);
-        			num ++;
-        		}
-            	
+        		
         	}
         	
-        	if(sum ==0 || weightedAvg ==0) {
+        	if(sum ==0) {
         		//no similarity, just use mixed baseline to estimate
         		return predict(rater, item, Method.MIXED_BASELINE, 
         				  numItemNeighbors, numRaterNeighbors);
         	}
-        	
-        	System.out.println("weighted");
-        	return new Rating(rater, item, weightedAvg/sum);
         	
         }
 

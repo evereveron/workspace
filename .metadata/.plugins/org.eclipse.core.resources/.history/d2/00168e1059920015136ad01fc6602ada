@@ -60,8 +60,8 @@ public class SampleRun {
     
     /** What method should be used for making predictions */
     static RatingDictionary.Method predictionMethod =
-        //RatingDictionary.Method.ITEM_SIMILARITY;
-    	RatingDictionary.Method.RATER_SIMILARITY;
+        RatingDictionary.Method.ITEM_SIMILARITY;
+    	//RatingDictionary.Method.RATER_SIMILARITY;
     	//RatingDictionary.Method.ITEM_BASELINE;
     	//RatingDictionary.Method.RATER_BASELINE;
     	//RatingDictionary.Method.MIXED_BASELINE;
@@ -81,8 +81,7 @@ public class SampleRun {
         
         // Load training data from the movielens dataset.
         RatingDictionary rd = RatingDictionary.fromMovieLensItems(filePrefix + ".item");
-        //RatingTable data = rd.tabulateMovieLensData(filePrefix + ".data");
-        RatingTable data = rd.tabulateMovieLensData("Sample.data");
+        RatingTable data = rd.tabulateMovieLensData(filePrefix + ".data");
         rd.addTrainingData(data, sampleFold, numCrossFolds);
         
         // Process the data to build models.

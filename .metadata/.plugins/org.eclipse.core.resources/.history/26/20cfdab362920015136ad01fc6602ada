@@ -61,9 +61,9 @@ public class SampleRun {
     /** What method should be used for making predictions */
     static RatingDictionary.Method predictionMethod =
         //RatingDictionary.Method.ITEM_SIMILARITY;
-    	RatingDictionary.Method.RATER_SIMILARITY;
+    	//RatingDictionary.Method.RATER_SIMILARITY;
     	//RatingDictionary.Method.ITEM_BASELINE;
-    	//RatingDictionary.Method.RATER_BASELINE;
+    	RatingDictionary.Method.RATER_BASELINE;
     	//RatingDictionary.Method.MIXED_BASELINE;
     	//RatingDictionary.Method.CUSTOM;
     

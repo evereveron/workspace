@@ -555,9 +555,7 @@ public class RatingDictionary {
         		}
         		
         		String key = st.similarities.get(i).key;
-            	//Rating rating = raterData.get(rater).getRatingFor(key);
-        		RatingTable rt = raterData.get(key);
-        		Rating rating = rt.getRatingFor(item);
+            	Rating rating = raterData.get(rater).getRatingFor(key);
             	
             	if(rating != null && st.similarities.get(i).value > 0) {
         			System.out.println("raw Score: " + rating.rawScore);

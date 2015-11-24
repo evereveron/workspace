@@ -555,9 +555,7 @@ public class RatingDictionary {
         		}
         		
         		String key = st.similarities.get(i).key;
-            	//Rating rating = raterData.get(rater).getRatingFor(key);
-        		RatingTable rt = raterData.get(key);
-        		Rating rating = rt.getRatingFor(item);
+            	Rating rating = raterData.get(rater).getRatingFor(key);
             	
             	if(rating != null && st.similarities.get(i).value > 0) {
         			System.out.println("raw Score: " + rating.rawScore);
@@ -570,13 +568,13 @@ public class RatingDictionary {
         		}
         		else if(rating != null){
         			System.out.println("rating is null");
-        			//weightedAvg += st.similarities.get(i).predict(rating.rawScore);
+        			weightedAvg += st.similarities.get(i).predict(rating.rawScore);
         			num ++;
         		}
             	
         	}
         	
-        	if(sum ==0 || weightedAvg ==0) {
+        	if(sum ==0) {
         		//no similarity, just use mixed baseline to estimate
         		return predict(rater, item, Method.MIXED_BASELINE, 
         				  numItemNeighbors, numRaterNeighbors);
