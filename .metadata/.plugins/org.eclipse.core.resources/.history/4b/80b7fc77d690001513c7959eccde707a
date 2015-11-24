@@ -1,0 +1,84 @@
+package Summary;
+
+import com.mongodb.DBObject;
+
+public class Summary {
+	DBObject review;
+	int numPos;
+	int numNeg;
+	String rating;
+	
+	public Summary(DBObject review) {
+		this.review = review;
+	}
+
+	/**
+	 * @return the review
+	 */
+	public DBObject getReview() {
+		return review;
+	}
+
+	/**
+	 * @param review the review to set
+	 */
+	public void setReview(DBObject review) {
+		this.review = review;
+	}
+
+	/**
+	 * @return the numPos
+	 */
+	public int getNumPos() {
+		return numPos;
+	}
+
+	/**
+	 * @param numPos the numPos to set
+	 */
+	public void setNumPos(int numPos) {
+		this.numPos = numPos;
+	}
+
+	/**
+	 * @return the numNeg
+	 */
+	public int getNumNeg() {
+		return numNeg;
+	}
+
+	/**
+	 * @param numNeg the numNeg to set
+	 */
+	public void setNumNeg(int numNeg) {
+		this.numNeg = numNeg;
+	}
+
+	/**
+	 * @return the rating
+	 */
+	public String isRating() {
+		return rating;
+	}
+
+	/**
+	 * @param rating the rating to set
+	 */
+	public void setRating(int numPos, int numNeg) {
+		this.numNeg = numNeg;
+		this.numPos = numPos;
+		
+		if(numPos >= numNeg) {
+			this.rating = "positive";
+		}
+		else this.rating = "negative";
+
+	}
+	
+	public void print() {
+		if(rating.equals("positive")) {
+			System.out.println("Positive rating.");
+			return;
+		}else System.out.println("Negative rating.");
+	}
+}

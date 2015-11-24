@@ -1,0 +1,8 @@
+package Summary;
+
+import com.mongodb.DBObject;
+
+public class Summary {
+	DBObject review;
+	
+}

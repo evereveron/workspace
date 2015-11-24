@@ -1,0 +1,49 @@
+package io.github.test;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.github.sqlconnection.BaseConnection;
+
+public class MongoConnection {
+	private static ArrayList<String> pos = new ArrayList<String>();
+	private static ArrayList<String> neg = new ArrayList<String>();
+	
+	public static void main(String[] args) throws IOException{
+		parse("negative words.txt", "positive words.txt");
+		
+		BaseConnection bc = new BaseConnection();
+		bc.connect();
+		bc.showDBs();
+		
+		bc.setDBAndCollection("cs336", "unlabel_review");
+		
+		bc.close();
+	}
+	
+	private static void parse(String negFilename, String posFilename) throws IOException {
+		File negFile = new File(negFilename);
+		File posFile = new File(posFilename);
+		
+		FileReader negFR = new FileReader(negFile); 
+		BufferedReader br = new BufferedReader(negFR);
+		String line;
+	    while((line = br.readLine()) != null) {
+	    	System.out.println(line);
+	    	neg.add(line);
+	    }
+	    negFR.close();
+	    
+	    FileReader posFR = new FileReader(posFile);
+	    br = new BufferedReader(posFR);
+	    while((line = br.readLine()) != null) {
+	    	System.out.println(line);
+	    	pos.add(line);
+	    }
+	    posFR.close();
+	}
+}
