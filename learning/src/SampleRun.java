@@ -15,7 +15,7 @@ public class SampleRun {
     static int numCrossFolds = 10;
     
     /** Which crossvalidation fold to use as a sample */
-    static int sampleFold = 0;
+    static int sampleFold = 7;
     
     /**
      * Should we subtract off a baseline before assessing
@@ -27,10 +27,12 @@ public class SampleRun {
     /** How to calculate similarities between items */
     static RatingTable.SimilarityMeasure itemSimilarityMeasure =
         RatingTable.SimilarityMeasure.PEARSON;
+    	//RatingTable.SimilarityMeasure.EUCLIDEAN;
 
     /** How to calculate similarities between items */
     static RatingTable.SimilarityMeasure raterSimilarityMeasure =
         RatingTable.SimilarityMeasure.PEARSON;
+    	//RatingTable.SimilarityMeasure.EUCLIDEAN;
     
     /** 
      * How many ratings must two item records have in common
@@ -50,21 +52,21 @@ public class SampleRun {
      * Determines the overall memory requirements for the
      * program so be careful about setting this too big.
      */
-    static int maxNeighbors = 100;
+    static int maxNeighbors = 150;
     
     /** How many neighbors should be considered in making predictions */
-    static int numItemNeighbors = 3;
+    static int numItemNeighbors = 150;
 
     /** How many neighbors should be considered in making predictions */
-    static int numRaterNeighbors = 3;
+    static int numRaterNeighbors = 150;
     
     /** What method should be used for making predictions */
     static RatingDictionary.Method predictionMethod =
         //RatingDictionary.Method.ITEM_SIMILARITY;
-    	RatingDictionary.Method.RATER_SIMILARITY;
+    	//RatingDictionary.Method.RATER_SIMILARITY;
     	//RatingDictionary.Method.ITEM_BASELINE;
     	//RatingDictionary.Method.RATER_BASELINE;
-    	//RatingDictionary.Method.MIXED_BASELINE;
+    	RatingDictionary.Method.MIXED_BASELINE;
     	//RatingDictionary.Method.CUSTOM;
     
     /** Whether to display each prediction made */
@@ -81,8 +83,8 @@ public class SampleRun {
         
         // Load training data from the movielens dataset.
         RatingDictionary rd = RatingDictionary.fromMovieLensItems(filePrefix + ".item");
-        //RatingTable data = rd.tabulateMovieLensData(filePrefix + ".data");
-        RatingTable data = rd.tabulateMovieLensData("Sample.data");
+        RatingTable data = rd.tabulateMovieLensData(filePrefix + ".data");
+        //RatingTable data = rd.tabulateMovieLensData("Sample2.data");
         rd.addTrainingData(data, sampleFold, numCrossFolds);
         
         // Process the data to build models.

@@ -510,34 +510,34 @@ public class RatingDictionary {
         		
         		//weightedAvg += st.similarities.get(i).value * st.similarities.get(i).predict(itemData.get(item).getRatingFor(st.similarities.get(i).key).score);
         		if(rating != null && st.similarities.get(i).value > 0) {
-        			System.out.println("raw Score: " + rating.rawScore);
-        			System.out.println("score: " + rating.score);
+        			//System.out.println("raw Score: " + rating.rawScore);
+        			//System.out.println("score: " + rating.score);
         			weightedAvg += st.similarities.get(i).value * st.similarities.get(i).predict(rating.rawScore);
-        			System.out.println("sim value: " + st.similarities.get(i).value);
-        			System.out.println("rating predict: " + st.similarities.get(i).predict(rating.rawScore));
+        			//System.out.println("sim value: " + st.similarities.get(i).value);
+        			//System.out.println("rating predict: " + st.similarities.get(i).predict(rating.rawScore));
         			sum += st.similarities.get(i).value;
         			num++;
         		}
         		else if(rating != null){
-        			System.out.println("rating is not null");
+        			//System.out.println("rating is not null");
         			//weightedAvg += st.similarities.get(i).predict(rating.rawScore);
         			num ++;
         		}
         		
         		if(sum==0 && i==numItemNeighbors) {
-        			numItemNeighbors++;
+        			//numItemNeighbors++;
         		}
         		
         	}
-        	System.out.println("total sum: " + sum);
-        	System.out.println("weighted avg: " + weightedAvg);
+        	//System.out.println("total sum: " + sum);
+        	//System.out.println("weighted avg: " + weightedAvg);
         	if(sum == 0 || weightedAvg ==0) {
         		//there's no similarity so we should just use a mixed baseline
-        		System.out.println("default");
+        		//System.out.println("default");
         		return predict(rater, item, Method.MIXED_BASELINE, 
 			  numItemNeighbors, numRaterNeighbors);
         	}
-        	System.out.println("weighted");
+        	//System.out.println("weighted");
         	return new Rating(rater, item, weightedAvg/sum);
         }
 
@@ -560,16 +560,16 @@ public class RatingDictionary {
         		Rating rating = rt.getRatingFor(item);
             	
             	if(rating != null && st.similarities.get(i).value > 0) {
-        			System.out.println("raw Score: " + rating.rawScore);
-        			System.out.println("score: " + rating.score);
+        			//System.out.println("raw Score: " + rating.rawScore);
+        			//System.out.println("score: " + rating.score);
         			weightedAvg += st.similarities.get(i).value * st.similarities.get(i).predict(rating.rawScore);
-        			System.out.println("sim value: " + st.similarities.get(i).value);
-        			System.out.println("rating predict: " + st.similarities.get(i).predict(rating.rawScore));
+        			//System.out.println("sim value: " + st.similarities.get(i).value);
+        			//System.out.println("rating predict: " + st.similarities.get(i).predict(rating.rawScore));
         			sum += st.similarities.get(i).value;
         			num++;
         		}
         		else if(rating != null){
-        			System.out.println("rating is null");
+        			//System.out.println("rating is null");
         			//weightedAvg += st.similarities.get(i).predict(rating.rawScore);
         			num ++;
         		}
@@ -582,13 +582,21 @@ public class RatingDictionary {
         				  numItemNeighbors, numRaterNeighbors);
         	}
         	
-        	System.out.println("weighted");
+        	//System.out.println("weighted");
         	return new Rating(rater, item, weightedAvg/sum);
         	
         }
 
         if (method == Method.CUSTOM) {
             // TBC: Your code here. TODO
+        	Rating r1 = predict(rater, item, Method.ITEM_SIMILARITY, 
+  				  numItemNeighbors, numRaterNeighbors);
+        	Rating r2 = predict(rater, item, Method.RATER_SIMILARITY, 
+    				  numItemNeighbors, numRaterNeighbors);
+        	Rating r3 = predict(rater, item, Method.MIXED_BASELINE,
+        			  numItemNeighbors, numRaterNeighbors);
+        	double r4 = (r1.rawScore + r2.rawScore + r3.rawScore)/3;
+        	return new Rating(rater, item, r4);
         }
 
         return new Rating(rater, item, this.defaultScore());
