@@ -1,0 +1,54 @@
+package cs336_parsing;
+
+import java.util.ArrayList;
+
+public class Restaurant {
+	String name;
+	String stars;
+	String rank;
+	public ArrayList<Review> reviews = new ArrayList<Review>();
+	
+	public Restaurant(String name, String stars, String rank) {
+		super();
+		this.name = name;
+		this.stars = stars;
+		this.rank = rank;
+	}
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	/**
+	 * @return the stars
+	 */
+	public String getStars() {
+		return stars;
+	}
+	/**
+	 * @param stars the stars to set
+	 */
+	public void setStars(String stars) {
+		this.stars = stars;
+	}
+	/**
+	 * @return the rank
+	 */
+	public String getRank() {
+		return rank;
+	}
+	/**
+	 * @param rank the rank to set
+	 */
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+	
+}

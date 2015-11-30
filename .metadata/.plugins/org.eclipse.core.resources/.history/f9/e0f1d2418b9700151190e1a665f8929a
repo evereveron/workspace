@@ -1,0 +1,8 @@
+package cs336_parsing;
+
+public class Restaurant {
+	String name;
+	String stars;
+	String rank;
+	
+}

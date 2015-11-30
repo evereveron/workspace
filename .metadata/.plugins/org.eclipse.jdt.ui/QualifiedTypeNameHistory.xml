@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="control.Control"/>
 <fullyQualifiedTypeName name="control.DiscussionController"/>
 <fullyQualifiedTypeName name="cs213.photoAlbum.model.totalData"/>
 <fullyQualifiedTypeName name="javax.swing.GroupLayout"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="Summary.Summary"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
 <fullyQualifiedTypeName name="org.json.simple.JSONObject"/>
+<fullyQualifiedTypeName name="RatingTable.SimilarityMeasure"/>
 </qualifiedTypeNameHistroy>

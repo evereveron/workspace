@@ -1,0 +1,47 @@
+package cs336_parsing;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class Parser {
+	public static BufferedReader br;
+	public static String line;
+	public static Restaurant curRes;
+	public static ArrayList<Restaurant> resList = new ArrayList<Restaurant>();
+	
+	public static void main(String[] args) throws IOException {
+		br = new BufferedReader(new FileReader("losangeles.txt") );
+		line = br.readLine();
+		while(line != null) {
+			if(line.equals("--------------------------------------------------")){
+				//new restaurant
+				line = br.readLine(); //to get restaurant metadata
+				String[] split1 = line.split(" - ");
+				String name = split1[0];
+				String tosplit = split1[1];
+				if(split1.length >2){
+					name = name + " - " + split1[1];
+					tosplit = split1[2];
+				}
+				System.out.println(name);
+				String[] split2 = tosplit.split("\\W+");
+				String rank = split2[0];
+				String stars;
+				if(split2.length == 5){
+					stars = split2[3] + "." + split2[4];
+				}
+				else stars = split2[3];
+				
+				curRes = new Restaurant(name, stars, rank);
+				resList.add(curRes);
+			}
+			else if(!line.equalsIgnoreCase("")){
+				System.out.println(line);
+			}
+			line = br.readLine();
+			
+		}
+	}
+}

@@ -1,0 +1,10 @@
+package cs336_parsing;
+
+public class Review {
+	String username;
+	String stars;
+	String reviews;
+	String resReviews;
+	String votes;
+	String date;
+}
