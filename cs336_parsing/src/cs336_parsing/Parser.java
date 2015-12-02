@@ -34,7 +34,7 @@ public class Parser {
 				}
 				//System.out.println(name);
 				String[] split2 = tosplit.split("\\W+");
-				String rank = split2[0];
+				String rank = split2[1];
 				String stars;
 				if(split2.length == 5){
 					stars = split2[3] + "." + split2[4];

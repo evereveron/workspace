@@ -1,0 +1,92 @@
+package io.github.test;
+
+import io.github.sqlconnection.BaseConnection;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import Summary.Summary;
+import Summary.Word;
+
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+public class similarity {
+	private static String unlabeled = "unlabel_review";
+	private static String splitRev = "unlabel_review_after_splitting";
+	private static List<DBObject> reviews = new ArrayList<DBObject>();
+	private static HashMap<String, Word> words = new HashMap<String, Word>();
+	int N=0;
+	
+	public static void main(String[] args) throws IOException{
+
+		BaseConnection bc = new BaseConnection();
+		bc.connect();
+		bc.showDBs();
+		
+		bc.setDBAndCollection("cs336", unlabeled);
+		
+		DBCursor cursor = bc.getCollection(unlabeled).find().limit(7);
+		reviews = cursor.toArray();
+		
+		DBCursor cursor2 = bc.getCollection(unlabeled).find();
+		
+		int i=0;
+		while(cursor2.hasNext()) {
+			N++;
+			String review = cursor2.next().get("review").toString();
+			String[] wordsRev = review.split("[\\W]");
+			for(String str: wordsRev) {
+				if(words.containsKey(str)){
+					words.get(str).increment();
+				}
+				else {
+					words.put(str, new Word(str));
+				}
+			}
+		}
+		
+		//review at 0 is the r*
+		//words are 
+		for(DBObject review: reviews) {
+			double wij1 = calculateTfidf("good", review);
+			double wij2 = calculateTfidf("film", review);
+			System.out.println(review.get("review"));
+			System.out.println(wij1 + ", " +wij2);
+			System.out.println();
+		}
+		
+		// convert to json and print to file
+		
+		bc.close();
+	}
+	
+	public static double calculateTfidf(String word, DBObject review) {
+		
+		return 0.0;
+	}
+	
+	public static double tf(String word, DBObject review) {
+		
+		String[] wordsRev = review.get("review").toString().split("[\\W]");
+		int count =0;
+		for(String wordR: wordsRev) {
+			if(wordR.equalsIgnoreCase(word)){
+				count++;
+			}
+		}
+		return (double)count;
+	}
+	
+	public static double idf(String word, DBObject review) {
+		
+	}
+}

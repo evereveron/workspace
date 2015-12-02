@@ -1,0 +1,61 @@
+package io.github.test;
+
+import io.github.sqlconnection.BaseConnection;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import Summary.Summary;
+import Summary.Word;
+
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+public class similarity {
+	private static String unlabeled = "unlabel_review";
+	private static String splitRev = "unlabel_review_after_splitting";
+	private static List<DBObject> reviews = new ArrayList<DBObject>();
+	private static HashMap<String, Word> words = new HashMap<String, Word>();
+	
+	public static void main(String[] args) throws IOException{
+
+		BaseConnection bc = new BaseConnection();
+		bc.connect();
+		bc.showDBs();
+		
+		bc.setDBAndCollection("cs336", unlabeled);
+		
+		DBCursor cursor = bc.getCollection(unlabeled).find().limit(7);
+		reviews = cursor.toArray();
+		
+		/*
+		DBCursor cursor2 = bc.getCollection(splitRev).find();
+		while(cursor2.hasNext()) {
+			cursor2.next();
+		}*/
+		
+		for(DBObject review: reviews) {
+			Summary summary = new Summary(review);
+			System.out.println(review.get("review").toString());
+			String[] words = review.get("review").toString().split("[\\W]");
+			for(String word: words) {
+				//
+			}
+			
+
+		}
+		
+		// convert to json and print to file
+		
+		bc.close();
+	}
+
+}

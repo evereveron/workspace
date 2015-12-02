@@ -1,0 +1,149 @@
+package io.github.test;
+
+import io.github.sqlconnection.BaseConnection;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import Summary.Summary;
+import Summary.Word;
+
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+public class similarity {
+	private static String unlabeled = "unlabel_review";
+	private static String splitRev = "unlabel_review_after_splitting";
+	private static List<DBObject> reviews = new ArrayList<DBObject>();
+	private static HashMap<String, Word> words = new HashMap<String, Word>();
+	private static int N=0;
+	
+	public static void main(String[] args) throws IOException{
+
+		BaseConnection bc = new BaseConnection();
+		bc.connect();
+		bc.showDBs();
+		
+		bc.setDBAndCollection("cs336", unlabeled);
+		
+		DBCursor cursor = bc.getCollection(unlabeled).find().limit(6);
+		reviews = cursor.toArray();
+		
+		DBCursor cursor2 = bc.getCollection(unlabeled).find();
+		
+		while(cursor2.hasNext()) {
+			N++;
+			String review = cursor2.next().get("review").toString();
+			String[] wordsRev = review.split("[\\W]");
+			for(String str: wordsRev) {
+				if(words.containsKey(str)){
+					if(!words.get(str).docIndexes.contains(N)) {
+						words.get(str).docIndexes.add(N);
+					}
+					words.get(str).increment();
+				}
+				else {
+					words.put(str, new Word(str));
+					words.get(str).docIndexes.add(N);
+				}
+			}
+		}
+		System.out.println(N + " reviews");
+		
+		//review at 0 is the r*
+		//words are 
+		/*
+		for(DBObject review: reviews) {
+			double wij1 = calculateTfidf("good", review.get("review").toString());
+			double wij2 = calculateTfidf("very", review.get("review").toString());
+			System.out.println(review.get("review"));
+			System.out.println(wij1 + ", " +wij2);
+			System.out.println();
+		}
+		*/
+		
+		String Q = "really bad";
+		double[] cosSimsQ = new double[6];
+		double[] cosSimsR = new double[6];
+		for(int i=0;i<reviews.size(); i ++) {
+			cosSimsR[i] = calculateCosineSimilarity(reviews.get(0).get("review").toString(), reviews.get(i).get("review").toString());
+			System.out.println(cosSimsR[i]);
+			cosSimsQ[i] = calculateCosineSimilarity(Q, reviews.get(i).get("review").toString());
+			System.out.println(cosSimsQ[i]);
+		}
+		
+		Arrays.sort(cosSimsQ);
+		Arrays.sort(cosSimsR);
+		
+		System.out.println("Cosine Similarity\n");
+/*
+		for(int i=0; i<cosSimsQ.length; i++) {
+			System.out.println(reviews.get(i).get("review").toString());
+			System.out.println("with r*: " + cosSimsR[i]);
+			System.out.println("with Q: " + cosSimsQ[i] + "\n");
+		}
+		*/
+		bc.close();
+	}
+	
+	public static double calculateCosineSimilarity(String query, String document) {
+		String[] queryWords = query.split("[\\W]");
+		double cosNum = 0;
+		double cosDen1 = 0;
+		double cosDen2 = 0;
+		
+		for(String word : queryWords) {
+			double queryTfidf = calculateTfidf(word, query);
+			double docTfidf = calculateTfidf(word, document);
+			
+			cosNum += (queryTfidf * docTfidf);
+			cosDen1 += Math.pow(queryTfidf, 2);
+			cosDen2 += Math.pow(docTfidf, 2);
+		}
+		
+		if(cosNum==0) {
+			return 0;
+		}
+		return cosNum /(Math.sqrt(cosDen1) * Math.sqrt(cosDen2));
+	}
+	
+	//tfidf = w_ij = TF * IDF
+	public static double calculateTfidf(String word, String review) {
+		
+		return tf(word, review) * idf(word);
+	}
+	
+	//TF = log(1+TF)
+	//# of times term j appears in review i
+	public static double tf(String word, String review) {
+		
+		String[] wordsRev = review.split("[\\W]");
+		int count =0;
+		for(String wordR: wordsRev) {
+			if(wordR.equalsIgnoreCase(word)){
+				count++;
+			}
+		}
+		double tf = Math.log10(1 + count);
+		System.out.println("tf: " + tf);
+		return tf;
+	}
+	
+	//IDF = log(N/n_j) 
+	//N : # docs
+	//n_j : # review term j is in
+	public static double idf(String word) {
+		System.out.println(words.get(word).docIndexes.size());
+		double idf = Math.log(N/words.get(word).docIndexes.size());
+		System.out.println("idf: " +idf);
+		return idf;
+	}
+}

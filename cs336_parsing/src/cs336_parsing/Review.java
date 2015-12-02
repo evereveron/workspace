@@ -22,7 +22,18 @@ public class Review {
 	}
 	
 	public String toCsv() {
-		return username+","+stars+","+date+","+reviews+","+resReviews+","+votes;
+		String content = username+","+stars+","+date+","+reviews+",";
+		if(resReviews.equalsIgnoreCase("None")){
+			content += ",";
+		}
+		else{
+			content += resReviews + ",";
+		}
+		if(!votes.equalsIgnoreCase("None")){
+			content += votes;
+		}
+		//return username+","+stars+","+date+","+reviews+","+resReviews+","+votes;
+		return content;
 	}
 	
 	

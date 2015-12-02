@@ -1,0 +1,22 @@
+package Summary;
+
+import java.util.ArrayList;
+
+public class Word {
+	public String word;
+	public int count;
+	public ArrayList<Integer> docIndexes;
+	
+	public Word(String word) {
+		super();
+		this.word = word;
+		this.count = 0;
+		this.docIndexes = new ArrayList<Integer>();
+	}
+	
+	public void increment() {
+		count++;
+		return;
+	}
+	
+}
