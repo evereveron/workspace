@@ -1,0 +1,98 @@
+package stuff;
+
+import java.util.Collection;
+
+public class SpaceSearchState implements SearchState {
+	
+    private static final String ADD_A = "add A";
+    private static final String ADD_B = "add B";  
+    private static final String ADD_C = "add C"; 
+    private static final String ADD_D = "add D";    
+    private static final String ADD_E = "add E";    
+    private static final String ADD_F = "add F";    
+    private static final String ADD_G = "add G";    
+    private static final String ADD_H = "add H";    
+    private static final String ADD_I = "add I";    
+    private static final String ADD_J = "add ree";   
+    private static final String ADD_K = "add three";   
+    private static final String ADD_L = "add three";
+    private static final String ADD_M = "add three";
+    private static final String ADD_N = "add three";
+    private static final String ADD_O = "add three";
+    private static final String ADD_P = "add three";
+    private static final String ADD_Q = "add three";
+    private static final String ADD_R = "add three";
+    private static final String ADD_S = "add three";
+    private static final String ADD_T = "add three";
+    private static final String ADD_U = "add three";
+    private static final String ADD_V = "add three";
+    private static final String ADD_W = "add three";
+    private static final String ADD_X = "add three";
+    private static final String ADD_Y = "add three";
+    private static final String ADD_Z = "add three";
+	
+	final String goal;
+	final String state;
+	final int index;
+	
+	public SpaceSearchState (String goal, String state, int index) {
+		this.goal = goal;
+		this.state = state;
+		this.index = index;
+	}
+	
+	/**
+     * This Builder class illustrates the builder pattern
+     * to get the initial state 
+     * corresponding to a search problem.
+     */
+    public static class Builder extends SearchState.Builder {
+	/**
+	 * Make the search space to get a specified targetQuantity of
+	 * flour into the workspace by the available operations.
+	 *
+	 * @param targetQuantity specification of the problem instance to solve
+	 * @return initial search state corresponding to this problem
+	 */
+	public SearchState makeInitialState(String targetString) 
+	    throws IllegalArgumentException {
+			return new SpaceSearchState("" + targetString.charAt(0), targetString);
+
+		}
+    }
+
+
+	@Override
+	public boolean isGoal() {
+		return goal.equals(state);
+	}
+
+	@Override
+	public Collection<String> getApplicableActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getActionCost(String action) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public SearchState applyAction(String action) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override 
+    public int hashCode() {
+		return 0;
+    }
+	
+	@Override 
+    public boolean equals(Object other) {
+		return true;
+    }
+
+}

@@ -1,0 +1,91 @@
+package scraper;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class wishes {
+	
+	private static File file = new File("wishes.xls");
+	private static ArrayList<Wish> wishes = new ArrayList<Wish>();
+	private static ArrayList<String> users = new ArrayList<String>();
+
+	public static void main(String[] args) {
+
+		//add parse file method for usernames?
+		users.add("evereveron");
+		users.add("T1War");
+		users.add("ScionOfTheVoid");
+		users.add("Anzle");
+		users.add("boomsinclair");
+		users.add("hutima");
+		users.add("hypophysis");
+		users.add("kuroiblood");
+		
+		for(String user: users) {
+			try {
+				Document doc = Jsoup.connect("http://steamcommunity.com/id/" + user + "/wishlist/").get();
+				System.out.println("this is::: " + user);
+				
+				Elements results = doc.getElementsByClass("wishlistRow");
+				for(Element result: results) {
+					String gameid = result.id().replace("game_", "");
+					String oprice = "";
+					String sprice = "";
+					String discount = "";
+					String price = "";
+					boolean discounted = false;
+					
+					//if discount exists:
+					if(!result.getElementsByClass("discount_block").isEmpty()) {
+						oprice = result.getElementsByClass("discount_original_price").text();
+						sprice = result.getElementsByClass("discount_final_price").text();
+						discount = result.getElementsByClass("discount_pct").text();
+						
+						discounted = true;
+					}
+					
+					//else:
+					else {
+						price = result.getElementsByClass("price").text();
+					}
+					String imgurl = result.select("img[src~=(?i)\\.(png|jpe?g|gif)]").first().attr("href");
+					String rank = result.getElementsByClass("wishlist_rank_ro").text();
+					String name = result.getElementsByClass("ellipsis").text();
+					String dateAdded = result.getElementsByClass("wishlist_added_on").text().replace("Added on ", "");
+				
+					System.out.println("game; "+name+", img: "+imgurl+", rank: "+rank+", date: "+dateAdded);
+					if(discounted) {
+						System.out.println("old price: " +oprice+", price: "+ sprice+", discount: "+discount);
+					}
+					else System.out.println("price: "+price);
+					System.out.println("");
+					
+					//create wish object, add to arraylist
+					Wish wish = new Wish(gameid, oprice, sprice, discount, price, discounted, imgurl, rank, name, dateAdded, user);
+					wishes.add(wish);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("error getting wishes");
+			}
+		}
+		
+		System.out.println("done grabbing wishes\n");
+		System.out.println("writing to excel...");
+		
+		writeExcel();
+		
+		System.out.println("done");
+	}
+	
+	public static void writeExcel() {
+		
+	}
+
+}

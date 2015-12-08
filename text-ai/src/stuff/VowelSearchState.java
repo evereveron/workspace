@@ -1,0 +1,41 @@
+package stuff;
+
+import java.util.Collection;
+
+public class VowelSearchState implements SearchState {
+
+	@Override
+	public boolean isGoal() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Collection<String> getApplicableActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getActionCost(String action) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public SearchState applyAction(String action) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override 
+    public int hashCode() {
+		return 0;
+    }
+	
+	@Override 
+    public boolean equals(Object other) {
+		return true;
+    }
+
+}

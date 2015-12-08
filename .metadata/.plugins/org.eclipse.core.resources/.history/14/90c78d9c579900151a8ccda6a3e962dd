@@ -1,0 +1,205 @@
+package scraper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class wishes {
+	
+	private static File file = new File("wishes.xls");
+	private static ArrayList<Wish> wishes = new ArrayList<Wish>();
+	private static ArrayList<String> users = new ArrayList<String>();
+
+	public static void main(String[] args) throws IOException, RowsExceededException, WriteException {
+
+		//add parse file method for usernames?
+		users.add("evereveron");
+		users.add("T1War");
+		users.add("ScionOfTheVoid");
+		users.add("Anzle");
+		users.add("boomsinclair");
+		users.add("hutima");
+		users.add("hypophysis");
+		users.add("kuroiblood");
+		
+		for(String user: users) {
+			try {
+				Document doc = Jsoup.connect("http://steamcommunity.com/id/" + user + "/wishlist/").get();
+				System.out.println("this is::: " + user);
+				
+				Elements results = doc.getElementsByClass("wishlistRow");
+				for(Element result: results) {
+					String gameid = result.id().replace("game_", "");
+					String oprice = "";
+					String sprice = "";
+					String discount = "";
+					String price = "";
+					boolean discounted = false;
+					
+					//if discount exists:
+					if(!result.getElementsByClass("discount_block").isEmpty()) {
+						oprice = result.getElementsByClass("discount_original_price").text();
+						sprice = result.getElementsByClass("discount_final_price").text();
+						discount = result.getElementsByClass("discount_pct").text();
+						
+						discounted = true;
+					}
+					
+					//else:
+					else {
+						price = result.getElementsByClass("price").first().text();
+					}
+					String imgurl = result.select("img[src~=(?i)\\.(png|jpe?g|gif)]").first().attr("src");
+					String rank = result.getElementsByClass("wishlist_rank_ro").text();
+					String name = result.getElementsByClass("ellipsis").text();
+					String dateAdded = result.getElementsByClass("wishlist_added_on").text().replace("Added on ", "");
+				
+					if(user.equals("evereveron")) {
+					System.out.println("game; "+name+", img: "+imgurl+", rank: "+rank+", date: "+dateAdded);
+					if(discounted) {
+						System.out.println("old price: " +oprice+", price: "+ sprice+", discount: "+discount);
+					}
+					else System.out.println("price: "+price);
+					System.out.println("");
+					}
+					//create wish object, add to arraylist
+					Wish wish = new Wish(gameid, oprice, sprice, discount, price, discounted, imgurl, rank, name, dateAdded, user);
+					wishes.add(wish);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("error getting wishes");
+			}
+		}
+		
+		System.out.println("done grabbing wishes\n");
+		System.out.println("writing to excel...");
+		
+		writeExcel();
+		
+		System.out.println("done");
+	}
+	
+	public static void writeExcel() throws IOException, RowsExceededException, WriteException {
+		if(!file.exists()) {
+			file.createNewFile();
+		}
+		
+		WritableWorkbook workbook;
+		workbook = Workbook.createWorkbook(file);
+		WritableSheet sheet = workbook.createSheet("Wishlist", 0);
+		
+		
+		//create reusable font formatter
+		WritableFont boldLabel = new WritableFont(WritableFont.TAHOMA, 12, WritableFont.BOLD);
+		WritableCellFormat boldFormat = new WritableCellFormat(boldLabel);
+		
+		//labels for store sheet
+		Label appIDLabel = new Label(0, 0, "App ID", boldFormat);
+		sheet.addCell(appIDLabel);
+		
+		Label opricelabel = new Label(1, 0, "Original Price", boldFormat);
+		sheet.addCell(opricelabel);
+		
+		Label spriceLabel = new Label(2, 0, "Sale Price", boldFormat);
+		sheet.addCell(spriceLabel);
+		
+		Label discountLabel = new Label(3, 0, "Discount", boldFormat);
+		sheet.addCell(discountLabel);
+		
+		Label photourlLabel = new Label(4, 0, "Photo Url", boldFormat);
+		sheet.addCell(photourlLabel);
+		
+		Label rankLabel = new Label(5, 0, "Rank", boldFormat);
+		sheet.addCell(rankLabel);
+		
+		Label nameLabel = new Label(6, 0, "Name", boldFormat);
+		sheet.addCell(nameLabel);
+		
+		Label dateLabel = new Label(7, 0, "Date Added", boldFormat);
+		sheet.addCell(dateLabel);
+		
+		Label usernameLabel = new Label(8, 0, "Username", boldFormat);
+		sheet.addCell(usernameLabel);
+		
+		
+		int gameNum =0;
+		for(int i=0; i < wishes.size(); i++) {
+			//go down the cells
+			Wish cur = wishes.get(i);
+
+			for(int j=0; j < 9; j++) {
+				//go across the cells
+				switch(j) {
+				//add to the correct column
+				case 0:
+					Label aid = new Label(j, i +1, cur.gameid);
+					sheet.addCell(aid);
+					break;
+				case 1:
+					Label gn;
+					if(!cur.discounted){
+						gn = new Label(j, i+1, cur.price);
+					}
+					else gn = new Label(j, i +1, cur.oprice);
+					sheet.addCell(gn);
+					break;
+				case 2:
+					Label gd = new Label(j, i+1, cur.sprice);
+					sheet.addCell(gd);
+					break;
+				case 3:
+					Label gdi = new Label(j, i+1, cur.getDiscount());
+					sheet.addCell(gdi);
+					break;
+				case 4:
+					Label gp = new Label(j, i+1, cur.imgurl);
+					sheet.addCell(gp);
+					break;
+				case 5:
+					Label gp2 = new Label(j, i+1, cur.rank);
+					sheet.addCell(gp2);
+					break;
+				case 6:
+					Label gph = new Label(j, i+1, cur.name);
+					sheet.addCell(gph);
+					break;
+				case 7:
+					Label gurl = new Label(j, i+1, cur.dateAdded);
+					sheet.addCell(gurl);
+					break;
+				case 8:
+					Label gr = new Label(j, i+1, cur.username);
+					sheet.addCell(gr);
+					break;
+
+				default:
+					Label error = new Label(j, i+1, "");
+					sheet.addCell(error);
+				}
+				
+
+			}
+		}
+		
+		//close excel
+		workbook.write();
+		workbook.close();
+	}
+
+}

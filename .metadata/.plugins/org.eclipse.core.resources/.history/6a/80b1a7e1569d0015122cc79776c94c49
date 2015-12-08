@@ -1,0 +1,72 @@
+package stuff;
+
+import java.util.Collection;
+
+public class SpaceSearchState implements SearchState {
+
+	final String goal;
+	final int index;
+	
+	public SpaceSearchState (int index, String goal) {
+		this.index = index;
+		this.goal = goal;
+	}
+	
+	/**
+     * This Builder class illustrates the builder pattern
+     * to get the initial state 
+     * corresponding to a search problem.
+     */
+    public static class Builder extends SearchState.Builder {
+	/**
+	 * Make the search space to get a specified targetQuantity of
+	 * flour into the workspace by the available operations.
+	 *
+	 * @param targetQuantity specification of the problem instance to solve
+	 * @return initial search state corresponding to this problem
+	 */
+	public SearchState makeInitialState(String targetString) 
+	    throws IllegalArgumentException {
+			return new SpaceSearchState(0, targetString);
+
+		}
+    }
+
+
+	@Override
+	public boolean isGoal() {
+		return goal.length() == index);
+	}
+
+	@Override
+	public Collection<String> getApplicableActions() {
+		String action;
+		for(int i=1; i<goal.length(); i++) {
+			action = goal.substring(0, i);
+		}
+		return null;
+	}
+
+	@Override
+	public double getActionCost(String action) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public SearchState applyAction(String action) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override 
+    public int hashCode() {
+		return 0;
+    }
+	
+	@Override 
+    public boolean equals(Object other) {
+		return true;
+    }
+
+}

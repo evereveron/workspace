@@ -1,0 +1,130 @@
+package scraper;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+
+public class ScraperTags {
+
+	private static File file = new File("steamTags.xls");
+	private static File gfile = new File("steam.xls");
+	private static ArrayList<String> gameIDs = new ArrayList<String>();
+	private static int numGames = 0;
+	private static ArrayList<Tag> tagList = new ArrayList<Tag>();
+	
+	public static void main(String[] args) throws IOException, RowsExceededException, WriteException {
+		File inputWorkBook = gfile;
+		Workbook w;
+		
+		try {
+			w = Workbook.getWorkbook(inputWorkBook);
+			Sheet sheet1 = w.getSheet(0);
+			numGames = sheet1.getRows()-1;
+			for(int i =1; i<numGames; i++) {
+				Cell cell = sheet1.getCell(0, i);
+				gameIDs.add(cell.getContents());
+				//System.out.println(cell.getContents());
+			}
+			w.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		//create tags sheet
+		if(!file.exists()) {
+			file.createNewFile();
+		}
+		
+		WritableWorkbook workbook;
+		workbook = Workbook.createWorkbook(file);
+		WritableSheet sheet = workbook.createSheet("Steam Store", 0);
+		
+		
+		//create reusable font formatter
+		WritableFont boldLabel = new WritableFont(WritableFont.TAHOMA, 12, WritableFont.BOLD);
+		WritableCellFormat boldFormat = new WritableCellFormat(boldLabel);
+		
+		//labels for store sheet
+		Label appIDLabel = new Label(0, 0, "App ID", boldFormat);
+		sheet.addCell(appIDLabel);
+		
+		Label tagLabel = new Label(1, 0, "Tag", boldFormat);
+		sheet.addCell(tagLabel);
+		
+		for(int i=0;i<1000 ; i++) {
+			
+			System.out.println(i);
+		
+			try {
+				
+				Document doc = Jsoup.connect("http://store.steampowered.com/app/" + gameIDs.get(i)).get();
+
+				//System.out.println(doc.html());
+				Elements results = doc.getElementsByClass("app_tag");
+				
+				
+				for(Element result : results) {
+					String tagName = result.text();
+					if(tagName.equals("+")) {
+						continue;
+					}
+					System.out.println(tagName);
+					Tag tag = new Tag(gameIDs.get(i), tagName);
+					tagList.add(tag);
+
+				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+		
+		}
+		
+		//print to excel
+		System.out.println("excel");
+		
+		for(int i=0; i < tagList.size(); i++) {
+			//go down the cells
+			Tag cur = tagList.get(i);
+			
+			for(int j=0; j < 2; j++) {
+				//go across the cells
+				switch(j) {
+				//add to the correct column
+				case 0:
+					Label aid = new Label(j, i +1, cur.getGameID());
+					sheet.addCell(aid);
+					break;
+				case 1:
+					Label gn = new Label(j, i +1, cur.getTag());
+					sheet.addCell(gn);
+					break;
+				default:
+					System.out.println("error");
+				}
+			}
+		} 
+		workbook.write();
+		workbook.close();
+	}
+}
