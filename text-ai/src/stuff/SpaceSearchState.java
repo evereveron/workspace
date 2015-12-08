@@ -5,16 +5,18 @@ import java.util.Collection;
 
 public class SpaceSearchState implements SearchState {
 
-	final int index;
-	final String goal;
-	final String current;
+
+	public final int index;
+	public final String goal;
+	public final String current;
 	
 	public SpaceSearchState (int index, String goal, String current) {
+		System.out.println("\n new Search: [index: "+index+"; goal: "+goal+"; current: "+current+"]");
 		this.index = index;
 		this.goal = goal;
 		this.current = current;
 	}
-	
+
 	/**
      * This Builder class illustrates the builder pattern
      * to get the initial state 
@@ -37,6 +39,7 @@ public class SpaceSearchState implements SearchState {
 
 	@Override
 	public boolean isGoal() {
+		System.out.println("goal: " +goal);
 		return goal.length() == index;
 	}
 
@@ -44,8 +47,10 @@ public class SpaceSearchState implements SearchState {
 	public Collection<String> getApplicableActions() {
 		ArrayList<String> actions = new ArrayList<String>();
 		String action;
-		for(int i=1; i<goal.length(); i++) {
-			action = goal.substring(0, i);
+		System.out.println("actions.... index: "+index+", goal: "+goal);
+		for(int i=1+index; i<goal.length(); i++) {
+			action = goal.substring(index, i);
+			System.out.println(action);
 			actions.add(action);
 		}
 		return actions;
@@ -53,13 +58,16 @@ public class SpaceSearchState implements SearchState {
 
 	@Override
 	public double getActionCost(String action) {
-		return UnigramModel.getInstance().cost(action);
+		double cost = UnigramModel.getInstance().cost(action);
+		System.out.println("Cost: " + cost);
+		return cost;
 	}
 
 	@Override
 	public SearchState applyAction(String action) {
 		// TODO Auto-generated method stub
-		System.out.println(action);
+		//System.out.println("Current:    " + current);
+		System.out.println("Apply Action:   " + action);
 		return new SpaceSearchState(action.length(), goal.substring(action.length()), ""+goal.charAt(current.length()));
 	}
 	

@@ -1,0 +1,88 @@
+package stuff;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class SpaceSearchState implements SearchState {
+
+	public final int index;
+	public final String goal;
+	public final int goalIndex;
+	
+	public SpaceSearchState (int index, String goal, String current) {
+		System.out.println("\n new Search: [index: "+index+"; goal: "+goal+"; current: "+goalIndex+"]");
+		this.index = index;
+		this.goal = goal;
+		this.goalIndex = goalIndex;
+	}
+
+	/**
+     * This Builder class illustrates the builder pattern
+     * to get the initial state 
+     * corresponding to a search problem.
+     */
+    public static class Builder extends SearchState.Builder {
+	/**
+	 * Make the search space to get a specified targetQuantity of
+	 * flour into the workspace by the available operations.
+	 *
+	 * @param targetQuantity specification of the problem instance to solve
+	 * @return initial search state corresponding to this problem
+	 */
+	public SearchState makeInitialState(String targetString) 
+	    throws IllegalArgumentException {
+			return new SpaceSearchState(0, targetString, targetString.length);
+
+		}
+    }
+
+	@Override
+	public boolean isGoal() {
+		System.out.println("goal: " +goal);
+		return goal.length() == 0;
+	}
+
+	@Override
+	public Collection<String> getApplicableActions() {
+		ArrayList<String> actions = new ArrayList<String>();
+		String action;
+		for(int i=1+index; i<goal.length(); i++) {
+			action = goal.substring(0, i);
+			actions.add(action);
+		}
+		return actions;
+	}
+
+	@Override
+	public double getActionCost(String action) {
+		double cost = UnigramModel.getInstance().cost(action);
+		System.out.println("Cost: " + cost);
+		return cost;
+	}
+
+	@Override
+	public SearchState applyAction(String action) {
+		// TODO Auto-generated method stub
+		//System.out.println("Current:    " + current);
+		System.out.println("Apply Action:   " + action);
+		return new SpaceSearchState(action.length(), goal.substring(action.length()), ""+goal.charAt(current.length()));
+	}
+	
+	@Override
+    public int hashCode() {
+		//something something goal index
+		return index ^ goal.length();
+    }
+	
+	@Override 
+    public boolean equals(Object other) {
+		if (other == null) return false;
+		if (other == this) return true;
+		if (!(other instanceof SpaceSearchState)) return false;
+		SpaceSearchState otherState = (SpaceSearchState) other;
+		return (otherState.index == this.index &&
+			otherState.goal.equals(this.goal) &&
+			otherState.current.equals(this.current));
+    }
+
+}
